@@ -29,6 +29,11 @@
       align-items: center;
       text-align: center;
       padding: 0 1rem;
+      transition: opacity 0.3s ease;
+    }
+
+    header.fade-out {
+      opacity: 0;
     }
 
     header h1 {
@@ -36,6 +41,12 @@
       text-transform: uppercase;
       letter-spacing: 0.15rem;
       z-index: 10;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    header.fade-out h1 {
+      transform: translateY(-20px);
+      opacity: 0;
     }
 
     header p {
@@ -43,6 +54,12 @@
       max-width: 600px;
       margin-top: 1rem;
       z-index: 10;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    header.fade-out p {
+      transform: translateY(-20px);
+      opacity: 0;
     }
 
     .canvas-container {
@@ -54,68 +71,131 @@
       z-index: -1;
     }
 
-    /* --- Tab Navigation --- */
-    .tabs {
-      display: flex;
-      justify-content: center;
-      background: #1a1a1a;
-      padding: 0.8rem 0;
-      position: sticky;
-      top: 0;
+    /* --- Navigation Menu --- */
+    .nav-menu {
+      position: fixed;
+      top: 50%;
+      right: 30px;
+      transform: translateY(-50%);
       z-index: 1000;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    .tabs button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 0.95rem;
-      padding: 0.4rem 0.9rem;
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
       cursor: pointer;
-      transition: color 0.3s ease;
-      border-bottom: 2px solid transparent; /* Placeholder for active state */
+      transition: all 0.3s ease;
+      position: relative;
     }
 
-    .tabs button:hover {
-      color: #007BFF;
+    .nav-dot:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: scale(1.2);
     }
 
-    .tabs button.active {
-      color: #007BFF;
-      border-bottom: 2px solid #007BFF;
+    .nav-dot.active {
+      background: white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .nav-dot::after {
+      content: attr(data-section);
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .nav-dot:hover::after {
+      opacity: 1;
     }
 
     /* --- Content Sections --- */
-    .content {
-      padding: 1.5rem;
-      max-width: 750px;
-      margin: 0 auto;
-      display: none; /* Hidden by default */
+    .section {
+      min-height: 100vh;
+      padding: 80px 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      scroll-margin-top: 20px;
     }
 
-    .content.active {
-      display: block; /* Shown when active */
+    .section:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+    }
+
+    .section-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-header h2 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 0.5rem;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      color: #aaa;
+      max-width: 500px;
+      margin: 0 auto;
+      font-weight: 300;
     }
 
     .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
-      padding: 1.2rem;
-      margin-bottom: 1.2rem;
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
     }
 
     .card h2 {
       margin-bottom: 1rem;
-      color: #00A1FF;
-      font-size: 1.6rem;
+      color: white;
+      font-size: 1.8rem;
+      font-weight: 700;
     }
 
     .card h3 {
-      margin-bottom: 0.3rem;
-      color: #00A1FF;
-      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
     
     .card p em {
@@ -130,7 +210,7 @@
     }
 
     .highlight {
-      color: #00A1FF;
+      color: white;
       font-weight: bold;
     }
 
@@ -146,24 +226,30 @@
 
     .tech-tag {
       display: inline-block;
-      background: rgba(0, 123, 255, 0.2);
-      color: #00A1FF;
-      padding: 0.2rem 0.5rem;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 0.3rem 0.6rem;
       border-radius: 4px;
       font-size: 0.8rem;
       margin: 0.2rem 0.2rem 0.2rem 0;
-      border: 1px solid rgba(0, 123, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .tech-tag:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
     }
 
     .status-badge {
       display: inline-block;
-      background: rgba(0, 255, 0, 0.2);
-      color: #00ff00;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       font-size: 0.8rem;
       margin-left: 0.5rem;
-      border: 1px solid rgba(0, 255, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     /* --- Footer --- */
@@ -191,9 +277,11 @@
     @media (max-width: 768px) {
       header h1 { font-size: 2rem; }
       header p { font-size: 1rem; max-width: 90%; }
-      .tabs { flex-wrap: wrap; padding: 0.5rem; }
-      .tabs button { font-size: 0.85rem; padding: 0.3rem 0.6rem; }
-      .content { padding: 1rem; }
+      .nav-menu { right: 15px; }
+      .nav-dot { width: 10px; height: 10px; }
+      .section { padding: 60px 1rem 1rem; }
+      .section-header h2 { font-size: 2rem; }
+      .section-header p { font-size: 1rem; }
     }
   </style>
 </head>
@@ -201,46 +289,58 @@
 
   <header>
     <div class="canvas-container"></div>
-    <h1>Safal Dhamala</h1>
-    <div>
-      <span class="highlight">CS & AI</span> at Mississippi State University (4.0 GPA).
+    <!-- Use Inter and Poppins for a modern, clean look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&family=Poppins:wght@700;900&display=swap" rel="stylesheet">
+    <h1 style="font-family: 'Poppins', 'Inter', 'Segoe UI', Arial, sans-serif; font-weight: 900; letter-spacing: 0.18em;">
+      Safal Dhamala
+    </h1>
+    <!-- <div style="font-family: 'Inter', 'Poppins', Arial, sans-serif;">
+      CS Junior, Mississippi State University
     </div>
-    <div>
+    <div style="font-family: 'Inter', 'Poppins', Arial, sans-serif;">
       Specialized in <span class="highlight">Deep Reinforcement Learning, LLMs, Computer Vision, and Distributed Systems.</span>
-    </div>
+    </div> -->
   </header>
 
-  <div class="tabs" role="tablist">
-    <button class="tab-button active" data-tab="about" role="tab">About</button>
-    <button class="tab-button" data-tab="experience" role="tab">Experience</button>
-    <button class="tab-button" data-tab="projects" role="tab">Projects</button>
-    <button class="tab-button" data-tab="publications" role="tab">Publications</button>
-    <button class="tab-button" data-tab="education" role="tab">Education</button>
-    <button class="tab-button" data-tab="skills" role="tab">Skills</button>
+  <!-- Navigation Dots -->
+  <div class="nav-menu">
+    <div class="nav-dot active" data-section="About" data-target="about"></div>
+    <div class="nav-dot" data-section="Experience" data-target="experience"></div>
+    <div class="nav-dot" data-section="Projects" data-target="projects"></div>
+    <div class="nav-dot" data-section="Publications" data-target="publications"></div>
+    <div class="nav-dot" data-section="Education" data-target="education"></div>
+    <div class="nav-dot" data-section="Skills" data-target="skills"></div>
   </div>
 
-  <div id="about" class="content active" role="tabpanel">
-    <div class="card">
-      <h2>About Me</h2>
-      <p>
-        AI-focused Computer Science student at Mississippi State University with a <span class="highlight">4.0 GPA</span> 
-        (Expected graduation: May 2027). Experienced in cutting-edge research spanning <span class="highlight">Deep Reinforcement Learning</span>, 
-        LLMs, Computer Vision, and Distributed Algorithms. Passionate about developing intelligent systems that solve real-world problems.
-      </p>
+  <!-- About Section -->
+  <section id="about" class="section">
+    <div class="section-header">
+      <h2>About</h2>
     </div>
-  </div>
-
-  <div id="experience" class="content" role="tabpanel">
     <div class="card">
+      <ul>
+        <li>Computer Science student at Mississippi State University</li>
+        <li><span class="highlight">4.0 GPA</span> (Expected graduation: May 2027)</li>
+        <li>Specialized in <span class="highlight">Deep Reinforcement Learning</span>, LLMs, Computer Vision</li>
+        <li>Passionate about developing intelligent systems</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section id="experience" class="section">
+    <div class="section-header">
       <h2>Experience</h2>
+    </div>
+    <div class="card">
       <h3>Research Intern, Deep Reinforcement Learning <span class="status-badge">Current</span></h3>
       <p><em>MSU Wireless, Mississippi State University</em> | Jan 2025 – Present</p>
       <ul>
-        <li>Engineered a hierarchical reinforcement learning system in PyTorch that improved resource allocation profit by <span class="highlight">up to 20.18%</span> over PPO baselines in complex 6G O-RAN simulation</li>
-        <li>Developed and implemented an Action-Mapped PPO agent to manage competing QoS demands for high-throughput (eMBB) and low-latency (URLLC) services</li>
-        <li>Built and managed the full simulation pipeline using Python, SUMO, and NetworkX, responsible for all model training, benchmarking, and results generation</li>
+        <li>Engineered hierarchical RL system improving resource allocation by <span class="highlight">20.18%</span> over PPO baselines</li>
+        <li>Developed Action-Mapped PPO agent for competing QoS demands</li>
+        <li>Built full simulation pipeline using Python, SUMO, and NetworkX</li>
       </ul>
-      <div style="margin-top: 0.5rem;">
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">PyTorch</span>
         <span class="tech-tag">Deep RL</span>
         <span class="tech-tag">SUMO</span>
@@ -252,11 +352,11 @@
       <h3>Research Software Engineer, Neural Engineering</h3>
       <p><em>Neural Engineering Research Division, MSU</em> | Aug 2024 – Dec 2024</p>
       <ul>
-        <li>Developed a reusable experimental framework in Python and PsychoPy that empowered biology researchers to conduct custom EEG experiments without programming expertise</li>
-        <li>Engineered end-to-end software pipeline for stimulus presentation, event timing, and real-time EEG data logging</li>
-        <li>Wrote MATLAB scripts for post-session data processing, including signal filtering and artifact removal</li>
+        <li>Developed reusable experimental framework for EEG experiments</li>
+        <li>Engineered end-to-end software pipeline for stimulus presentation</li>
+        <li>Wrote MATLAB scripts for signal processing and artifact removal</li>
       </ul>
-      <div style="margin-top: 0.5rem;">
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Python</span>
         <span class="tech-tag">PsychoPy</span>
         <span class="tech-tag">MATLAB</span>
@@ -268,30 +368,33 @@
       <h3>Research Assistant, Distributed Algorithms</h3>
       <p><em>Mississippi State University</em> | May 2024 – Dec 2024</p>
       <ul>
-        <li>Investigated theoretical frameworks for fault-tolerant mobile robot dispersion on graphs, analyzing algorithms for system resilience and multi-agent coordination</li>
-        <li>Conducted comparative analysis of <span class="highlight">15+ state-of-the-art</span> dispersion algorithms, evaluating asymptotic complexity and theoretical performance guarantees</li>
-        <li>Authored comprehensive technical survey consolidating findings, identifying key research gaps and proposing novel approaches</li>
+        <li>Investigated fault-tolerant mobile robot dispersion algorithms</li>
+        <li>Analyzed <span class="highlight">15+ state-of-the-art</span> dispersion algorithms</li>
+        <li>Authored comprehensive technical survey and research findings</li>
       </ul>
-      <div style="margin-top: 0.5rem;">
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Graph Theory</span>
         <span class="tech-tag">Multi-Agent Systems</span>
         <span class="tech-tag">Distributed Computing</span>
         <span class="tech-tag">Algorithm Analysis</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="projects" class="content" role="tabpanel">
-    <div class="card">
+  <!-- Projects Section -->
+  <section id="projects" class="section">
+    <div class="section-header">
       <h2>Projects</h2>
+    </div>
+    <div class="card">
       <h3>CampusVision: University Building Classifier</h3>
       <p><em>4th place in MSU AI Club Campus Vision Challenge</em></p>
       <ul>
-        <li>Assembled and preprocessed a novel <span class="highlight">20 GB image dataset</span> of university buildings</li>
-        <li>Fine-tuned ResNet-18 model achieving <span class="highlight">98% accuracy</span> on held-out test set across 10 distinct building classes</li>
-        <li>Implemented comprehensive data augmentation and preprocessing pipeline</li>
+        <li>Built <span class="highlight">20 GB image dataset</span> of university buildings</li>
+        <li>Achieved <span class="highlight">98% accuracy</span> with ResNet-18 across 10 building classes</li>
+        <li>Implemented comprehensive data augmentation pipeline</li>
       </ul>
-      <div style="margin-top: 0.5rem;">
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">PyTorch</span>
         <span class="tech-tag">ResNet-18</span>
         <span class="tech-tag">Computer Vision</span>
@@ -303,11 +406,11 @@
       <p><em>Computer Vision-powered iOS alarm app</em></p>
       <ul>
         <li>Prototyping alarm app requiring solved Rubik's Cube to deactivate</li>
-        <li>Built and annotated robust dataset of <span class="highlight">1,000+ cube images</span> under various lighting and orientations</li>
-        <li>Engineered two-stage pipeline with YOLOv11 for cube detection and MobileNetV3 for state classification</li>
-        <li>Designed system architecture for future on-device inference in iOS application</li>
+        <li>Built dataset of <span class="highlight">1,000+ cube images</span> under various conditions</li>
+        <li>Engineered two-stage pipeline with YOLOv11 and MobileNetV3</li>
+        <li>Designed system architecture for on-device iOS inference</li>
       </ul>
-      <div style="margin-top: 0.5rem;">
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">YOLOv11</span>
         <span class="tech-tag">MobileNetV3</span>
         <span class="tech-tag">iOS</span>
@@ -315,19 +418,22 @@
         <span class="tech-tag">Mobile ML</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="publications" class="content" role="tabpanel">
-    <div class="card">
+  <!-- Publications Section -->
+  <section id="publications" class="section">
+    <div class="section-header">
       <h2>Publications</h2>
+    </div>
+    <div class="card">
       <h3>AI-Driven Slice-Aware Digital Twin Virtualization in O-RAN for IoV with eMBB and URLLC Traffic</h3>
       <p><em>Submitted to IEEE MILCOM 2025 (under review)</em></p>
-      <p style="margin-top: 0.5rem;">
-        Research paper on applying AI-driven digital twin technology to optimize O-RAN networks for Internet of Vehicles (IoV) 
-        applications, specifically addressing the competing demands of enhanced Mobile Broadband (eMBB) and 
-        Ultra-Reliable Low Latency Communication (URLLC) traffic types.
-      </p>
-      <div style="margin-top: 0.5rem;">
+      <ul>
+        <li>AI-driven digital twin technology for O-RAN networks</li>
+        <li>Optimization for Internet of Vehicles (IoV) applications</li>
+        <li>Addressing competing eMBB and URLLC traffic demands</li>
+      </ul>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Digital Twin</span>
         <span class="tech-tag">O-RAN</span>
         <span class="tech-tag">IoV</span>
@@ -335,57 +441,64 @@
         <span class="tech-tag">AI/ML</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div id="education" class="content" role="tabpanel">
-    <div class="card">
+  <!-- Education Section -->
+  <section id="education" class="section">
+    <div class="section-header">
       <h2>Education</h2>
+    </div>
+    <div class="card">
       <h3>Bachelor of Science in Computer Science</h3>
       <p><em>Mississippi State University</em> | Aug 2023 – May 2027 (Expected)</p>
       <ul>
         <li>Concentration: <span class="highlight">Artificial Intelligence</span></li>
         <li>GPA: <span class="highlight">4.0</span></li>
-        <li>Relevant Coursework: Computer Vision, Deep Learning, Data Structures & Algorithms, System Programming, Linear Algebra, Calculus IV, Software Development Tools</li>
+        <li>Computer Vision, Deep Learning, Data Structures & Algorithms</li>
+        <li>System Programming, Linear Algebra, Calculus IV</li>
       </ul>
     </div>
-  </div>
+  </section>
 
-  <div id="skills" class="content" role="tabpanel">
+  <!-- Skills Section -->
+  <section id="skills" class="section">
+    <div class="section-header">
+      <h2>Skills</h2>
+    </div>
     <div class="card">
-      <h2>Technical Skills</h2>
       <h3>Programming Languages</h3>
-      <p>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Python</span>
         <span class="tech-tag">C++</span>
         <span class="tech-tag">Java</span>
         <span class="tech-tag">MATLAB</span>
         <span class="tech-tag">Bash</span>
         <span class="tech-tag">LaTeX</span>
-      </p>
+      </div>
     </div>
     <div class="card">
       <h3>ML/DL Frameworks</h3>
-      <p>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">PyTorch</span>
         <span class="tech-tag">PyTorch Lightning</span>
         <span class="tech-tag">TorchRL</span>
         <span class="tech-tag">TensorFlow</span>
         <span class="tech-tag">Scikit-learn</span>
-      </p>
+      </div>
     </div>
     <div class="card">
       <h3>RL, CV & LLM Libraries</h3>
-      <p>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Stable-Baselines3</span>
         <span class="tech-tag">YOLOv11</span>
         <span class="tech-tag">OpenCV</span>
         <span class="tech-tag">LangChain</span>
         <span class="tech-tag">OpenAI API</span>
-      </p>
+      </div>
     </div>
     <div class="card">
       <h3>Simulation & Data Processing</h3>
-      <p>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">SUMO/TraCI</span>
         <span class="tech-tag">NetworkX</span>
         <span class="tech-tag">NumPy</span>
@@ -393,11 +506,11 @@
         <span class="tech-tag">Matplotlib</span>
         <span class="tech-tag">CVAT</span>
         <span class="tech-tag">PsychoPy</span>
-      </p>
+      </div>
     </div>
     <div class="card">
       <h3>DevOps & Development Tools</h3>
-      <p>
+      <div style="margin-top: 1rem;">
         <span class="tech-tag">Git</span>
         <span class="tech-tag">Docker</span>
         <span class="tech-tag">Anaconda</span>
@@ -405,9 +518,9 @@
         <span class="tech-tag">Google Colab</span>
         <span class="tech-tag">Linux</span>
         <span class="tech-tag">CUDA</span>
-      </p>
+      </div>
     </div>
-  </div>
+  </section>
 
   <footer>
     <p>&copy; <script>document.write(new Date().getFullYear())</script> Safal Dhamala. All rights reserved.</p>
@@ -462,24 +575,80 @@
       });
     }
 
-    // --- Simple Tab Navigation ---
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const contentSections = document.querySelectorAll('.content');
+    // --- Scroll Fade Animation ---
+    const header = document.querySelector('header');
+    let lastScrollTop = 0;
+    let fadeThreshold = 100; // Start fading after 100px of scroll
 
-    tabButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Remove active class from all buttons and content sections
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        contentSections.forEach(section => section.classList.remove('active'));
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      
+      if (scrollTop > fadeThreshold) {
+        // Calculate fade intensity based on scroll position
+        const fadeIntensity = Math.min((scrollTop - fadeThreshold) / 200, 1);
+        header.style.opacity = 1 - fadeIntensity;
+        header.style.transform = `translateY(${-fadeIntensity * 30}px)`;
+      } else {
+        // Reset to original state when scrolling back to top
+        header.style.opacity = 1;
+        header.style.transform = 'translateY(0)';
+      }
+      
+      lastScrollTop = scrollTop;
+    });
 
-        // Add active class to the clicked button and its corresponding content
-        button.classList.add('active');
-        const targetContent = document.getElementById(button.dataset.tab);
-        if (targetContent) {
-          targetContent.classList.add('active');
+    // --- Navigation and Scroll Animations ---
+    const navDots = document.querySelectorAll('.nav-dot');
+    const sections = document.querySelectorAll('.section');
+    const sectionHeaders = document.querySelectorAll('.section-header');
+
+    // Smooth scrolling for navigation dots
+    navDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        const targetId = dot.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: 'smooth' });
         }
       });
     });
+
+    // Update active navigation dot based on scroll position
+    function updateActiveNav() {
+      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      
+      sections.forEach((section, index) => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+          navDots.forEach(dot => dot.classList.remove('active'));
+          navDots[index].classList.add('active');
+        }
+      });
+    }
+
+    // Animate section headers when they come into view
+    function animateSectionHeaders() {
+      sectionHeaders.forEach(header => {
+        const headerTop = header.getBoundingClientRect().top;
+        const headerVisible = headerTop < window.innerHeight * 0.8;
+        
+        if (headerVisible) {
+          header.classList.add('visible');
+        }
+      });
+    }
+
+    // Add scroll event listeners
+    window.addEventListener('scroll', () => {
+      updateActiveNav();
+      animateSectionHeaders();
+    });
+
+    // Initial call to set up animations
+    updateActiveNav();
+    animateSectionHeaders();
   </script>
 </body>
 </html>
